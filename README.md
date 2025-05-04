@@ -1,4 +1,4 @@
-#PriceInsights
+# PriceInsights
 PriceInsights is a comprehensive full-stack price tracking solution that monitors product prices across multiple e-commerce platforms, including Blinkit, Zepto, and Amazon. Our intelligent system helps users make informed purchasing decisions, find the best deals, and save money.
 
 -Cross-Platform Price Monitoring: Track prices across 5+ major e-commerce platforms
