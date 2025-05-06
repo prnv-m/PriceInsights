@@ -1,0 +1,9 @@
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.9
+Accept-Encoding: gzip, deflate, br
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+Cache-Control: max-age=0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.3 Safari/605.1.15
+Referer: https://www.amazon.in/
+Cookie: session-id=940922486; session-id-time=1746456765; session-id=261-2205987-1208911; session-id-time=2082787201l; i18n-prefs=INR; ubid-acbin=259-9527863-4928818; session-token=zls7AWtKp9trG17w6IrWub8ThH0y0tKL2QwcelX0k1G3P/Sv6u8WsgLia6qa3FpWqk285W/GXtCaUyi1D0YrxM5iuOmrFlAxJpL8c/bzmmrgSoO8HiIfo5BVMHf2Geek7GuSLL9J6eIjIGkxzx6Q++tjcjRGVwsl9wUkGG3j6lB/b0sScRFtBQ/2Phku6BNVoiyfaGzpjT0SdlCi1tGwWNWXvo3DSf7/xhSRH35cwQB+zwcVGLTAFPimoePoztweePpv1ZkmWCPPk+orjii1cvdtRZsRrFNr15VpMtKSAMf6pX3ZSOR8OIj5KvpCOLIenJFv5Isej+9oGAkweFuzJgvN2SgdRPSN

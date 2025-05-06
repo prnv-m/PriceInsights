@@ -1,0 +1,9 @@
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.9
+Accept-Encoding: gzip, deflate, br
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+Cache-Control: max-age=0
+User-Agent: Mozilla/5.0 (iPad; CPU OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1
+Referer: https://www.flipkart.com/
+Cookie: session-id=728263584; session-id-time=1746456750

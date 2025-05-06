@@ -19,6 +19,7 @@ NEWSPIDER_MODULE = "amazonscraper.spiders"
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
 
+
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
 
@@ -91,3 +92,33 @@ ROBOTSTXT_OBEY = True
 REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
+# settings.py
+
+BOT_NAME = 'amazon_scraper'
+
+SPIDER_MODULES = ['amazon_scraper.spiders']
+NEWSPIDER_MODULE = 'amazon_scraper.spiders'
+
+# disable robots.txt (ScraperAPI already handles politeness)
+ROBOTSTXT_OBEY = False
+DOWNLOAD_DELAY = 1
+
+# your ScraperAPI key
+SCRAPERAPI_KEY = 'be9d4476f955f509cca0e67f32ea471f'
+
+# pretend to be a real browser
+USER_AGENT = (
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+    'AppleWebKit/537.36 (KHTML, like Gecko) '
+    'Chrome/124.0.0.0 Safari/537.36'
+)
+
+# feed export into outputs/amazon.json
+FEEDS = {
+    'outputs/amazon.json': {
+        'format': 'json',
+        'encoding': 'utf8',
+        'indent': 4,
+        'overwrite': True,
+    },
+}

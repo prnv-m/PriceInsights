@@ -17,11 +17,6 @@ app.add_middleware(
 
 @app.get("/products/mobiles")
 def get_products():
-    with open("mobileresultswithimages.json") as f:
-        data = json.load(f)
-    return JSONResponse(content=data)
-@app.get("/products/laptops")
-def get_products():
-    with open("results.json") as f:
+    with open("outputs/mobileresultswithimages.json") as f:
         data = json.load(f)
     return JSONResponse(content=data)

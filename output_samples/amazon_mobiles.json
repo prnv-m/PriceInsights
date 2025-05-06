@@ -1,0 +1,457 @@
+[
+    {
+        "title": "iPhone 16 256 GB: 5G Mobile Phone with Camera Control, A18 Chip and a Big Boost in Battery Life. Works with AirPods; Ultramarine",
+        "price": "₹82,900",
+        "image_url": "https://m.media-amazon.com/images/I/712SuRmHG4L._AC_UY218_.jpg",
+        "discount": "7% off",
+        "category": "mobile"
+    },
+    {
+        "title": "iPhone 16e 128 GB: Built for Apple Intelligence, A18 Chip, Supersized Battery Life, 48MP Fusion. Camera, 15.40 cm (6.1″) Super Retina XDR Display; Black",
+        "price": "₹53,999",
+        "image_url": "https://m.media-amazon.com/images/I/61FMZ9rSZUL._AC_UY218_.jpg",
+        "discount": "9% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Samsung Galaxy M05 (Mint Green, 4GB RAM, 64 GB Storage) | 50MP Dual Camera | Bigger 6.7\" HD+ Display | 5000mAh Battery | 25W Fast Charging | 2 Gen OS Upgrade & 4 Year Security Update | Without Charger",
+        "price": "₹6,249",
+        "image_url": "https://m.media-amazon.com/images/I/81T3olLXpUL._AC_UY218_.jpg",
+        "discount": "37% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Redmi A4 5G (Sparkle Purple, 4GB RAM, 128GB Storage) | Global Debut SD 4s Gen 2 | Segment Largest 6.88in 120Hz | 50MP Dual Camera | 18W Fast Charging",
+        "price": "₹8,799",
+        "image_url": "https://m.media-amazon.com/images/I/81BGKLI+cWL._AC_UY218_.jpg",
+        "discount": "26% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Redmi A4 5G (Starry Black, 4GB RAM, 128GB Storage) | Global Debut SD 4s Gen 2 | Segment Largest 6.88in 120Hz | 50MP Dual Camera | 18W Fast Charging",
+        "price": "₹8,799",
+        "image_url": "https://m.media-amazon.com/images/I/718HzJbvY1L._AC_UY218_.jpg",
+        "discount": "26% off",
+        "category": "mobile"
+    },
+    {
+        "title": "iQOO Z10x 5G (Titanium, 6GB RAM, 128GB Storage) | 6500 mAh Large Capacity Battery | Dimensity 7300 Processor | Military-Grade Certified Durability",
+        "price": "₹13,499",
+        "image_url": "https://m.media-amazon.com/images/I/61BupubdJqL._AC_UY218_.jpg",
+        "discount": "22% off",
+        "category": "mobile"
+    },
+    {
+        "title": "realme NARZO N61 (Voyage Blue,6GB RAM+128GB Storage) 90Hz Eye Comfort Display | IP54 Dust & Water Resistance | 48-Month Fluency | Charger in The Box",
+        "price": "₹8,498",
+        "image_url": "https://m.media-amazon.com/images/I/71r0Ysx+oVL._AC_UY218_.jpg",
+        "discount": "22% off",
+        "category": "mobile"
+    },
+    {
+        "title": "iQOO Z9s 5G (Titanium Matte, 8GB RAM, 128GB Storage) | 120 Hz 3D Curved AMOLED Display | 5500 mAh Ultra-Thin Battery | Dimesity 7300 5G Processor | Sony IMX882 OIS Camera with Aura Light",
+        "price": "₹18,999",
+        "image_url": "https://m.media-amazon.com/images/I/61BxKJrnbdL._AC_UY218_.jpg",
+        "discount": "26% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Samsung Galaxy M35 5G (Thunder Grey,6GB RAM,128GB Storage)| Corning Gorilla Glass Victus+| AnTuTu Score 595K+ | Vapour Cooling Chamber | 6000mAh Battery | 120Hz Super AMOLED Display| Without Charger",
+        "price": "₹13,999",
+        "image_url": "https://m.media-amazon.com/images/I/81DeHrvOoqL._AC_UY218_.jpg",
+        "discount": "42% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Samsung Galaxy M06 5G (Sage Green, 6GB RAM, 128 GB Storage) | MediaTek Dimensity 6300 | AnTuTu Score 422K+ | 12 5G Bands| 25W Fast Charging | 4 Gen. of OS Upgrades | Without Charger",
+        "price": "₹9,799",
+        "image_url": "https://m.media-amazon.com/images/I/718tAI-i2uL._AC_UY218_.jpg",
+        "discount": "36% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Apple iPhone 15 (128 GB) - Black",
+        "price": "₹58,999",
+        "image_url": "https://m.media-amazon.com/images/I/71657TiFeHL._AC_UY218_.jpg",
+        "discount": "15% off",
+        "category": "mobile"
+    },
+    {
+        "title": "iPhone 16 Pro Max 256 GB: 5G Mobile Phone with Camera Control, 4K 120 fps Dolby Vision and a Huge Leap in Battery Life. Works with AirPods; Black Titanium",
+        "price": "₹1,35,900",
+        "image_url": "https://m.media-amazon.com/images/I/619oqSJVY5L._AC_UY218_.jpg",
+        "discount": "6% off",
+        "category": "mobile"
+    },
+    {
+        "title": "realme NARZO N65 5G (Deep Green 6GB RAM, 128GB Storage) India's 1st D6300 5G Chipset | Ultra Slim Design | 120Hz Eye Comfort Display | 50MP AI Camera| Charger in The Box",
+        "price": "₹10,998",
+        "image_url": "https://m.media-amazon.com/images/I/717sEAdy02L._AC_UY218_.jpg",
+        "discount": "26% off",
+        "category": "mobile"
+    },
+    {
+        "title": "OnePlus Nord CE4 Lite 5G (Super Silver, 8GB RAM, 128GB Storage)",
+        "price": "₹17,998",
+        "image_url": "https://m.media-amazon.com/images/I/61Io5-ojWUL._AC_UY218_.jpg",
+        "discount": "14% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Redmi A4 5G (Starry Black, 4GB RAM, 64GB Storage) | Global Debut SD 4s Gen 2 | Segment Largest 6.88in 120Hz | 50MP Dual Camera | 18W Fast Charging",
+        "price": "₹7,999",
+        "image_url": "https://m.media-amazon.com/images/I/718HzJbvY1L._AC_UY218_.jpg",
+        "discount": "27% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Samsung Galaxy M06 5G (Sage Green, 4GB RAM, 64GB Storage) | MediaTek Dimensity 6300 | AnTuTu Score 422K+ | 12 5G Bands| 25W Fast Charging | 4 Gen. of OS Upgrades | Without Charger",
+        "price": "₹7,999",
+        "image_url": "https://m.media-amazon.com/images/I/718tAI-i2uL._AC_UY218_.jpg",
+        "discount": "36% off",
+        "category": "mobile"
+    },
+    {
+        "title": "iQOO Z9x 5G (Storm Grey, 4GB RAM, 128GB Storage) | Snapdragon 6 Gen 1 with 560k+ AnTuTu Score | 6000mAh Battery with 7.99mm Slim Design | 44W FlashCharge",
+        "price": "₹10,499",
+        "image_url": "https://m.media-amazon.com/images/I/61sY8BGOyEL._AC_UY218_.jpg",
+        "discount": "41% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Samsung Galaxy A55 5G (Awesome Iceblue, 8GB RAM, 128GB Storage) | Metal Frame | 50 MP Main Camera (OIS) | Nightography | IP67 | Corning Gorilla Glass Victus+ | sAMOLED with Vision Booster",
+        "price": "₹26,999",
+        "image_url": "https://m.media-amazon.com/images/I/71oZ2oEeD4L._AC_UY218_.jpg",
+        "discount": "37% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Samsung Galaxy M35 5G (Daybreak Blue,6GB RAM,128GB Storage)| Corning Gorilla Glass Victus+| AnTuTu Score 595K+ | Vapour Cooling Chamber | 6000mAh Battery | 120Hz Super AMOLED Display| Without Charger",
+        "price": "₹13,999",
+        "image_url": "https://m.media-amazon.com/images/I/81nt-RGKpyL._AC_UY218_.jpg",
+        "discount": "42% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Samsung Galaxy M06 5G (Sage Green, 4GB RAM, 128 GB Storage) | MediaTek Dimensity 6300 | AnTuTu Score 422K+ | 12 5G Bands| 25W Fast Charging | 4 Gen. of OS Upgrades | Without Charger",
+        "price": "₹8,499",
+        "image_url": "https://m.media-amazon.com/images/I/718tAI-i2uL._AC_UY218_.jpg",
+        "discount": "39% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Samsung Galaxy A55 5G (Awesome Iceblue, 8GB RAM, 128GB Storage) | Metal Frame | 50 MP Main Camera (OIS) | Nightography | IP67 | Corning Gorilla Glass Victus+ | sAMOLED with Vision Booster",
+        "price": "₹26,999",
+        "image_url": "https://m.media-amazon.com/images/I/71oZ2oEeD4L._AC_UY218_.jpg",
+        "discount": "37% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Samsung Galaxy M06 5G (Sage Green, 4GB RAM, 64GB Storage) | MediaTek Dimensity 6300 | AnTuTu Score 422K+ | 12 5G Bands| 25W Fast Charging | 4 Gen. of OS Upgrades | Without Charger",
+        "price": "₹7,999",
+        "image_url": "https://m.media-amazon.com/images/I/718tAI-i2uL._AC_UY218_.jpg",
+        "discount": "36% off",
+        "category": "mobile"
+    },
+    {
+        "title": "iPhone 16 128 GB: 5G Mobile Phone with Camera Control, A18 Chip and a Big Boost in Battery Life. Works with AirPods; Black",
+        "price": "₹72,490",
+        "image_url": "https://m.media-amazon.com/images/I/61135j8fPJL._AC_UY218_.jpg",
+        "discount": "9% off",
+        "category": "mobile"
+    },
+    {
+        "title": "iPhone 16e 128 GB: Built for Apple Intelligence, A18 Chip, Supersized Battery Life, 48MP Fusion. Camera, 15.40 cm (6.1″) Super Retina XDR Display; Black",
+        "price": "₹53,999",
+        "image_url": "https://m.media-amazon.com/images/I/61FMZ9rSZUL._AC_UY218_.jpg",
+        "discount": "9% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Vivo T3 Lite 5G Smartphone (Vibrant Green, 4GB Ram 128GB Storage)",
+        "price": "₹10,140",
+        "image_url": "https://m.media-amazon.com/images/I/61VxzkiD1EL._AC_UY218_.jpg",
+        "discount": "30% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Samsung Galaxy M06 5G (Sage Green, 4GB RAM, 128 GB Storage) | MediaTek Dimensity 6300 | AnTuTu Score 422K+ | 12 5G Bands| 25W Fast Charging | 4 Gen. of OS Upgrades | Without Charger",
+        "price": "₹8,499",
+        "image_url": "https://m.media-amazon.com/images/I/718tAI-i2uL._AC_UY218_.jpg",
+        "discount": "39% off",
+        "category": "mobile"
+    },
+    {
+        "title": "iQOO Z10x 5G (Titanium, 8GB RAM, 128GB Storage) | 6500 mAh Large Capacity Battery | Dimensity 7300 Processor | Military-Grade Certified Durability",
+        "price": "₹14,999",
+        "image_url": "https://m.media-amazon.com/images/I/61BupubdJqL._AC_UY218_.jpg",
+        "discount": "21% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Samsung Galaxy M35 5G (Daybreak Blue,8GB RAM,256GB Storage)| Corning Gorilla Glass Victus+| AnTuTu Score 595K+ | Vapour Cooling Chamber | 6000mAh Battery | 120Hz Super AMOLED Display| Without Charger",
+        "price": "₹18,499",
+        "image_url": "https://m.media-amazon.com/images/I/81nt-RGKpyL._AC_UY218_.jpg",
+        "discount": "32% off",
+        "category": "mobile"
+    },
+    {
+        "title": "POCO C61 Diamond Dust Black 4GB RAM 64GB ROM",
+        "price": "₹5,999",
+        "image_url": "https://m.media-amazon.com/images/I/71fSTJ34SnL._AC_UY218_.jpg",
+        "discount": "33% off",
+        "category": "mobile"
+    },
+    {
+        "title": "iQOO Z9x 5G (Tornado Green, 6GB RAM, 128GB Storage) | Snapdragon 6 Gen 1 with 560k+ AnTuTu Score | 6000mAh Battery with 7.99mm Slim Design | 44W FlashCharge",
+        "price": "₹11,999",
+        "image_url": "https://m.media-amazon.com/images/I/61nKhMnr-XL._AC_UY218_.jpg",
+        "discount": "36% off",
+        "category": "mobile"
+    },
+    {
+        "title": "iQOO Z10x 5G (Ultramarine, 6GB RAM, 128GB Storage) | 6500 mAh Large Capacity Battery | Dimensity 7300 Processor | Military-Grade Certified Durability",
+        "price": "₹13,499",
+        "image_url": "https://m.media-amazon.com/images/I/61HEAjUp1tL._AC_UY218_.jpg",
+        "discount": "22% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Apple iPhone 15 (128 GB) - Black",
+        "price": "₹58,999",
+        "image_url": "https://m.media-amazon.com/images/I/71657TiFeHL._AC_UY218_.jpg",
+        "discount": "15% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Apple iPhone 15 (512 GB) - Black",
+        "price": "₹81,900",
+        "image_url": "https://m.media-amazon.com/images/I/71657TiFeHL._AC_UY218_.jpg",
+        "discount": "25% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Samsung Galaxy A55 5G (Awesome Iceblue, 8GB RAM, 128GB Storage) | Metal Frame | 50 MP Main Camera (OIS) | Nightography | IP67 | Corning Gorilla Glass Victus+ | sAMOLED with Vision Booster",
+        "price": "₹26,999",
+        "image_url": "https://m.media-amazon.com/images/I/71oZ2oEeD4L._AC_UY218_.jpg",
+        "discount": "37% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Samsung Galaxy M06 5G (Blazing Black, 6GB RAM, 128 GB Storage) | MediaTek Dimensity 6300 | AnTuTu Score 422K+ | 12 5G Bands | 25W Fast Charging | 4 Gen. of OS Upgrades | Without Charger",
+        "price": "₹9,799",
+        "image_url": "https://m.media-amazon.com/images/I/71s6rRbgfuL._AC_UY218_.jpg",
+        "discount": "36% off",
+        "category": "mobile"
+    },
+    {
+        "title": "iQOO Neo 10R 5G (Moonknight Titanium, 12GB RAM, 256GB Storage) | Snapdragon 8s Gen 3 Processor | India's Slimmest 6400mAh Battery Smartphone | Segment's Most Stable 90FPS for 5 Hours",
+        "price": "₹30,998",
+        "image_url": "https://m.media-amazon.com/images/I/610NUM9jlxL._AC_UY218_.jpg",
+        "discount": "13% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Vivo T3 Lite 5G Smartphone (Majestic Black, 4GB Ram 128GB Storage)",
+        "price": "₹10,120",
+        "image_url": "https://m.media-amazon.com/images/I/51mJWpZRLmL._AC_UY218_.jpg",
+        "discount": "30% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Samsung Galaxy S24 Ultra 5G AI Smartphone (Titanium Gray, 12GB, 256GB Storage)",
+        "price": "₹84,999",
+        "image_url": "https://m.media-amazon.com/images/I/717Q2swzhBL._AC_UY218_.jpg",
+        "discount": "37% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Motorola G35 5G (Leaf Green, 4GB RAM, 128GB Storage) | Ultra-Fast 5G Smartphone | 50MP AI Camera | 5000mAh Battery",
+        "price": "₹10,478",
+        "image_url": "https://m.media-amazon.com/images/I/61OCxNjjfuL._AC_UY218_.jpg",
+        "discount": "16% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Samsung Galaxy M35 5G (Moonlight Blue,6GB RAM,128GB Storage)| Corning Gorilla Glass Victus+| AnTuTu Score 595K+ | Vapour Cooling Chamber | 6000mAh Battery | 120Hz Super AMOLED Display| Without Charger",
+        "price": "₹13,999",
+        "image_url": "https://m.media-amazon.com/images/I/81PlVwPxFRL._AC_UY218_.jpg",
+        "discount": "42% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Tecno POP 9 (Startrail Black, 3GB+64GB) |India's 1st Mediatek G50 | IP54 Rated | IR Remote | Dual Speaker with DTS | 36 Month Lag Free Fluency | 15W Fast Charging Support | 5000 mAh Battery",
+        "price": "₹5,999",
+        "image_url": "https://m.media-amazon.com/images/I/61KKuoQTguL._AC_UY218_.jpg",
+        "discount": "29% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Vivo T3 Lite 5G Smartphone (Vibrant Green, 6GB Ram 128GB Storage)",
+        "price": "₹11,549",
+        "image_url": "https://m.media-amazon.com/images/I/61VxzkiD1EL._AC_UY218_.jpg",
+        "discount": "25% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Apple iPhone 13 (512GB) - Blue",
+        "price": "₹60,900",
+        "image_url": "https://m.media-amazon.com/images/I/71xb2xkN5qL._AC_UY218_.jpg",
+        "discount": "32% off",
+        "category": "mobile"
+    },
+    {
+        "title": "iPhone 16 Pro Max 256 GB: 5G Mobile Phone with Camera Control, 4K 120 fps Dolby Vision and a Huge Leap in Battery Life. Works with AirPods; Black Titanium",
+        "price": "₹1,35,900",
+        "image_url": "https://m.media-amazon.com/images/I/619oqSJVY5L._AC_UY218_.jpg",
+        "discount": "6% off",
+        "category": "mobile"
+    },
+    {
+        "title": "iPhone 16e 128 GB: Built for Apple Intelligence, A18 Chip, Supersized Battery Life, 48MP Fusion. Camera, 15.40 cm (6.1″) Super Retina XDR Display; White",
+        "price": "₹53,999",
+        "image_url": "https://m.media-amazon.com/images/I/61SKi94cImL._AC_UY218_.jpg",
+        "discount": "9% off",
+        "category": "mobile"
+    },
+    {
+        "title": "iPhone 16 128 GB: 5G Mobile Phone with Camera Control, A18 Chip and a Big Boost in Battery Life. Works with AirPods; Black",
+        "price": "₹72,490",
+        "image_url": "https://m.media-amazon.com/images/I/61135j8fPJL._AC_UY218_.jpg",
+        "discount": "9% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Nokia 130 Music | Built-in Powerful Loud Speaker with Music Player and Wireless FM Radio | Dedicated Music Buttons | Big 2.4” Display | 1 Month Standby Battery Life | Purple",
+        "price": "₹1,699",
+        "image_url": "https://m.media-amazon.com/images/I/61wB18+L+KL._AC_UY218_.jpg",
+        "discount": "22% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Samsung Galaxy S24 Ultra 5G AI Smartphone (Titanium Gray, 12GB, 256GB Storage)",
+        "price": "₹84,999",
+        "image_url": "https://m.media-amazon.com/images/I/717Q2swzhBL._AC_UY218_.jpg",
+        "discount": "37% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Motorola G45 5G (Brilliant Blue, 8GB RAM, 128GB Storage)",
+        "price": "₹11,710",
+        "image_url": "https://m.media-amazon.com/images/I/81dl4dQY3BL._AC_UY218_.jpg",
+        "discount": "21% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Vivo T3 Lite 5G Smartphone (Vibrant Green, 6GB Ram 128GB Storage)",
+        "price": "₹11,549",
+        "image_url": "https://m.media-amazon.com/images/I/61VxzkiD1EL._AC_UY218_.jpg",
+        "discount": "25% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Samsung Galaxy A55 5G (Awesome Iceblue, 8GB RAM, 256GB Storage) | Metal Frame | 50 MP Main Camera (OIS) | Nightography | IP67 | Corning Gorilla Glass Victus+ | sAMOLED with Vision Booster",
+        "price": "₹28,999",
+        "image_url": "https://m.media-amazon.com/images/I/71oZ2oEeD4L._AC_UY218_.jpg",
+        "discount": "36% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Samsung Galaxy M06 5G (Blazing Black, 4GB RAM, 128 GB Storage) | MediaTek Dimensity 6300 | AnTuTu Score 422K+ | 12 5G Bands | 25W Fast Charging | 4 Gen. of OS Upgrades | Without Charger",
+        "price": "₹8,499",
+        "image_url": "https://m.media-amazon.com/images/I/71s6rRbgfuL._AC_UY218_.jpg",
+        "discount": "39% off",
+        "category": "mobile"
+    },
+    {
+        "title": "realme NARZO N61 (Voyage Blue,4GB RAM+64GB Storage) 90Hz Eye Comfort Display | IP54 Dust & Water Resistance | 48-Month Fluency | Charger in The Box",
+        "price": "₹7,498",
+        "image_url": "https://m.media-amazon.com/images/I/71r0Ysx+oVL._AC_UY218_.jpg",
+        "discount": "16% off",
+        "category": "mobile"
+    },
+    {
+        "title": "iPhone 16 Pro Max 256 GB: 5G Mobile Phone with Camera Control, 4K 120 fps Dolby Vision and a Huge Leap in Battery Life. Works with AirPods; Black Titanium",
+        "price": "₹1,35,900",
+        "image_url": "https://m.media-amazon.com/images/I/619oqSJVY5L._AC_UY218_.jpg",
+        "discount": "6% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Apple iPhone 15 (128 GB) - Pink",
+        "price": "₹58,999",
+        "image_url": "https://m.media-amazon.com/images/I/71v2jVh6nIL._AC_UY218_.jpg",
+        "discount": "15% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Nokia 105 Classic | Single SIM Keypad Phone with Built-in UPI Payments, Long-Lasting Battery, Wireless FM Radio, Without Charger | Charcoal",
+        "price": "₹974",
+        "image_url": "https://m.media-amazon.com/images/I/51GSe9rxsoL._AC_UY218_.jpg",
+        "discount": "22% off",
+        "category": "mobile"
+    },
+    {
+        "title": "realme GT 6T 5G (Fluid Silver,8GB RAM+256GB Storage) | India's 1st 7+ Gen 3 Flagship Chipset | 1.5M + AnTuTu Score | 5500mAh+120W | The World's Brightest Flagship Display",
+        "price": "₹24,748",
+        "image_url": "https://m.media-amazon.com/images/I/61HyiMlCuTL._AC_UY218_.jpg",
+        "discount": "31% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Samsung Galaxy M35 5G (Daybreak Blue,8GB RAM,128GB Storage)| Corning Gorilla Glass Victus+| AnTuTu Score 595K+ | Vapour Cooling Chamber | 6000mAh Battery | 120Hz Super AMOLED Display| Without Charger",
+        "price": "₹15,499",
+        "image_url": "https://m.media-amazon.com/images/I/81nt-RGKpyL._AC_UY218_.jpg",
+        "discount": "40% off",
+        "category": "mobile"
+    },
+    {
+        "title": "iQOO Z9 Lite 5G (Mocha Brown, 6GB RAM, 128GB Storage) | Dimensity 6300 5G | 50MP Sony AI Camera | Charger in The Box",
+        "price": "₹11,499",
+        "image_url": "https://m.media-amazon.com/images/I/619VJYWIbXL._AC_UY218_.jpg",
+        "discount": "25% off",
+        "category": "mobile"
+    },
+    {
+        "title": "iQOO Z9 Lite 5G (Aqua Flow, 6GB RAM, 128GB Storage) | Dimensity 6300 5G | 50MP Sony AI Camera | Charger in The Box",
+        "price": "₹11,499",
+        "image_url": "https://m.media-amazon.com/images/I/61WZicN+coL._AC_UY218_.jpg",
+        "discount": "25% off",
+        "category": "mobile"
+    },
+    {
+        "title": "OnePlus Nord CE4 (Dark Chrome, 8GB RAM, 256GB Storage)",
+        "price": "₹23,998",
+        "image_url": "https://m.media-amazon.com/images/I/61g1pqSjAhL._AC_UY218_.jpg",
+        "discount": "11% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Redmi A4 5G (Sparkle Purple, 4GB RAM, 64GB Storage) | Global Debut SD 4s Gen 2 | Segment Largest 6.88in 120Hz | 50MP Dual Camera | 18W Fast Charging",
+        "price": "₹7,999",
+        "image_url": "https://m.media-amazon.com/images/I/81BGKLI+cWL._AC_UY218_.jpg",
+        "discount": "27% off",
+        "category": "mobile"
+    },
+    {
+        "title": "JioBharat K1 Karbonn 4G Keypad Phone with JioTV, JioCinema, JioSoundPay, JioSaavn, Long Lasting Battery, LED Torch, Digital Camera | Black & Red | Locked for JioNetwork",
+        "price": "₹699",
+        "image_url": "https://m.media-amazon.com/images/I/51pKgX6iYfL._AC_UY218_.jpg",
+        "discount": "65% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Samsung Galaxy A55 5G (Awesome Iceblue, 8GB RAM, 128GB Storage) | Metal Frame | 50 MP Main Camera (OIS) | Nightography | IP67 | Corning Gorilla Glass Victus+ | sAMOLED with Vision Booster",
+        "price": "₹26,999",
+        "image_url": "https://m.media-amazon.com/images/I/71oZ2oEeD4L._AC_UY218_.jpg",
+        "discount": "37% off",
+        "category": "mobile"
+    },
+    {
+        "title": "Samsung Galaxy M06 5G (Sage Green, 4GB RAM, 64GB Storage) | MediaTek Dimensity 6300 | AnTuTu Score 422K+ | 12 5G Bands| 25W Fast Charging | 4 Gen. of OS Upgrades | Without Charger",
+        "price": "₹7,999",
+        "image_url": "https://m.media-amazon.com/images/I/718tAI-i2uL._AC_UY218_.jpg",
+        "discount": "36% off",
+        "category": "mobile"
+    }
+]

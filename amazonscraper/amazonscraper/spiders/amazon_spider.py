@@ -1,27 +1,73 @@
 import scrapy
-
+from urllib.parse import urlencode
+import os
 class AmazonSpider(scrapy.Spider):
     name = 'amazon'
-    allowed_domains = ['amazon.in']
-    start_urls = ['https://www.amazon.in/s?k=mobile']
+    allowed_domains = ['api.scraperapi.com']
+    scraperapi_endpoint = 'https://api.scraperapi.com/'
+    API_KEY = os.getenv("API_KEY_SCRAPY")
+    # list your categories here
+    categories = [
+        'mobile', 'laptop', 'headphones', 'watch', 
+        'camera', 'television', 'speaker', 'printer'
+    ]
 
     def start_requests(self):
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
-                          '(KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-            'Accept-Language': 'en-US,en;q=0.9',
-        }
-        for url in self.start_urls:
-            yield scrapy.Request(url=url, headers=headers, callback=self.parse)
+        for cat in self.categories:
+            amazon_search = f'https://www.amazon.in/s?k={cat}'
+            params = {
+                'api_key': self.settings.get(API_KEY),
+                'url': amazon_search,
+                'render': 'true',
+                'autoparse': 'false',
+                'country_code': 'in',
+                'device_type': 'desktop',
+            }
+            url = f"{self.scraperapi_endpoint}?{urlencode(params)}"
+            yield scrapy.Request(
+                url,
+                callback=self.parse_search,
+                meta={'category': cat}
+            )
 
-    def parse(self, response):
-        for product in response.css('div.s-result-item'):
-            title = product.css('h2 span::text').get()
-            price = product.css('span.a-price-whole::text').get()
-            image_url =  product.css('img::attr(src)').get() or product.css('img::attr(data-src)').get() or product.css('img::attr(data-image-src)').get()
-            if title and price:
+    def parse_search(self, response):
+        category = response.meta['category']
+        # select all product containers (may need tweaking if Amazon layout changes)
+        products = response.css('div.s-main-slot div.s-result-item')
+
+        for product in products:
+            name = product.css('div[data-testid="product-name"] div::text').get()
+            price = product.css('div[data-testid="product-price"] span::text').get()
+            mrp = product.css('div[data-testid="product-mrp"] span::text').get()
+            qty = product.css('div[data-testid="product-qty"]::text').get()
+            rel_link = product.css('a::attr(href)').get()
+            image = product.css('img::attr(src)').get()
+
+            if name:
                 yield {
-                    'title': title.strip(),
-                    'price': price.strip(),
-                    'image-url': image_url.strip()
+                    'category': category,
+                    'name': name.strip(),
+                    'price': price.strip() if price else None,
+                    'quantity': qty.strip() if qty else None,
+                    'link': response.urljoin(rel_link) if rel_link else None,
+                    'image': image,
                 }
+
+        # simple pagination: look for “Next” link and follow
+        next_page = response.css('ul.a-pagination li.a-last a::attr(href)').get()
+        if next_page:
+            next_url = response.urljoin(next_page)
+            params = {
+                'api_key': self.settings.get('SCRAPERAPI_KEY'),
+                'url': next_url,
+                'render': 'true',
+                'autoparse': 'false',
+                'country_code': 'in',
+                'device_type': 'desktop',
+            }
+            paged_url = f"{self.scraperapi_endpoint}?{urlencode(params)}"
+            yield scrapy.Request(
+                paged_url,
+                callback=self.parse_search,
+                meta={'category': category}
+            )
