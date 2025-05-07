@@ -5,7 +5,7 @@ import TopPanel from './components/TopPanel';
 import { Input } from "./components/ui/input";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./components/ui/card";
 import { Badge } from "./components/ui/badge";
-import { Search, Filter, ShoppingCart, Loader, X, Menu, SlidersHorizontal } from "lucide-react";
+import { Search, Filter, ShoppingCart, Loader, X, Menu, SlidersHorizontal, ChartBar } from "lucide-react";
 import { Button } from "./components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "./components/ui/sheet";
 import { Checkbox } from "./components/ui/checkbox";
@@ -14,6 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "./components/ui/popover
 import { Separator } from "./components/ui/separator";
 import { ScrollArea } from "./components/ui/scroll-area";
 import { Slider } from "./components/ui/slider";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./components/ui/dialog";
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -28,19 +29,22 @@ function App() {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [priceRange, setPriceRange] = useState([0, 200000]);
   const [maxPrice, setMaxPrice] = useState(200000);
-  
+  const [priceHistory, setPriceHistory] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   const ITEMS_PER_PAGE = 12;
-  
+
   const categories = [
     "laptop", "mobile", "headphones", "camera", "television",
     "smartwatch", "tablet", "printer", "router", "gaming laptop"
   ];
-  
+
   // Initial data fetch
   useEffect(() => {
     fetchProducts();
   }, []);
-  
+
   // Update max price and price range when products are fetched
   useEffect(() => {
     if (products.length > 0) {
@@ -51,12 +55,12 @@ function App() {
       setPriceRange([0, roundedMax]);
     }
   }, [products]);
-  
+
   // Filter products whenever search term or categories change
   useEffect(() => {
     applyFilters();
   }, [searchTerm, selectedCategories, products, page]);
-  
+
   const fetchProducts = async () => {
     setIsLoading(true);
     try {
@@ -71,10 +75,21 @@ function App() {
       setIsLoading(false);
     }
   };
-  
+
+  const fetchPriceHistory = async (product) => {
+    try {
+      const response = await axios.get(`http://127.0.0.1:8000/products/${product.asin}`);
+      setPriceHistory(response.data.price_history);
+      setSelectedProduct(response.data);
+      setIsDialogOpen(true);
+    } catch (err) {
+      console.error("Error fetching price history:", err);
+    }
+  };
+
   const applyFilters = () => {
     let filtered = [...products];
-    
+
     // Apply search filter
     if (searchTerm) {
       filtered = filtered.filter(product => {
@@ -82,7 +97,7 @@ function App() {
         return title.toLowerCase().includes(searchTerm.toLowerCase());
       });
     }
-    
+
     // Apply category filter
     if (selectedCategories.length > 0) {
       filtered = filtered.filter(product => {
@@ -96,16 +111,16 @@ function App() {
       const price = parseFloat(getPrice(product));
       return price >= priceRange[0] && price <= priceRange[1];
     });
-    
+
     // Apply pagination
     setFilteredProducts(filtered.slice(0, page * ITEMS_PER_PAGE));
     setHasMore(filtered.length > page * ITEMS_PER_PAGE);
   };
-  
+
   const loadMoreProducts = () => {
     setPage(prevPage => prevPage + 1);
   };
-  
+
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
     setPage(1); // Reset to first page on new search
@@ -152,6 +167,11 @@ function App() {
   // Function to safely get category from different possible structures
   const getCategory = (product) => {
     return (product.category || 'Uncategorized').toLowerCase();
+  };
+
+  // Function to safely get discount from different possible structures
+  const getDiscount = (product) => {
+    return product.raw_discount || product.discount || null;
   };
 
   const LoadingIndicator = () => (
@@ -439,16 +459,19 @@ function App() {
                         <CardContent className="flex-none">
                           <div className="flex justify-between items-center">
                             <span className="text-xl font-bold">₹{getPrice(product)}</span>
-                            {product.discount && (
+                            {getDiscount(product) && (
                               <Badge variant="outline" className="text-green-600">
-                                {product.discount}
+                                {getDiscount(product)}
                               </Badge>
                             )}
                           </div>
                         </CardContent>
                         <CardFooter className="mt-auto">
-                          <Button className="w-full flex items-center gap-2">
-                            <ShoppingCart className="h-4 w-4" /> Add to Cart
+                          <Button 
+                            className="w-full flex items-center gap-2"
+                            onClick={() => fetchPriceHistory(product)}
+                          >
+                            <ChartBar className="h-4 w-4" /> View Price history
                           </Button>
                         </CardFooter>
                       </div>
@@ -460,6 +483,64 @@ function App() {
           </div>
         </div>
       </div>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold mb-4">
+              Price History
+            </DialogTitle>
+          </DialogHeader>
+          {selectedProduct && priceHistory && (
+            <div className="space-y-4">
+              <div className="flex items-center gap-4">
+                <img 
+                  src={selectedProduct.image_url} 
+                  alt={selectedProduct.title}
+                  className="w-20 h-20 object-contain"
+                />
+                <div>
+                  <h3 className="font-medium">{selectedProduct.title}</h3>
+                  <p className="text-sm text-gray-500">{selectedProduct.category}</p>
+                </div>
+              </div>
+              <div className="space-y-2">
+                {priceHistory.map((history, index) => {
+                  // Format date for display
+                  const date = new Date(history.timestamp);
+                  const formattedDate = date.toLocaleDateString();
+                  const formattedTime = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                  
+                  // Determine if this is a price change by comparing with previous entry
+                  const isPriceChange = index > 0 && 
+                    (history.raw_price !== priceHistory[index-1].raw_price || 
+                     history.raw_discount !== priceHistory[index-1].raw_discount);
+                  
+                  return (
+                    <div 
+                      key={index}
+                      className={`flex justify-between items-center p-3 rounded mb-2 ${isPriceChange ? 'bg-blue-50 border-l-4 border-blue-500' : 'bg-gray-50'}`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium">{history.raw_price}</span>
+                        {history.raw_discount && (
+                          <Badge variant="outline" className={history.raw_discount.includes('off') ? "text-green-600" : "text-gray-600"}>
+                            {history.raw_discount}
+                          </Badge>
+                        )}
+                      </div>
+                      <div className="flex flex-col items-end">
+                        <span className="text-sm font-medium">{formattedDate}</span>
+                        <span className="text-xs text-gray-500">{formattedTime}</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

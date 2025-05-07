@@ -104,4 +104,5 @@ def checkfirst():
     conn.close()
 
 if __name__ == "__main__":
+    insert_to_staging('amazon_all_categories_with_ts2.json')
     checkfirst()

@@ -136,7 +136,7 @@ if __name__ == "__main__":
         time.sleep(delay_between_categories)
 
     # Save all categories into a single JSON
-    output_file = 'amazon_all_categories_with_ts.json'
+    output_file = 'amazon_all_categories_with_ts2.json'
     with open(output_file, 'w', encoding='utf-8') as f:
         json.dump(all_products, f, indent=4, ensure_ascii=False)
     print(f"\nTotal products scraped: {len(all_products)}. Saved to {output_file}")
