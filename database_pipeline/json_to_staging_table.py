@@ -81,6 +81,7 @@ def insert_to_staging(file_path):
     cur.close()
     conn.close()
     print(" Insert completed.")
+
 def checkfirst():
     conn = psycopg2.connect(
         dbname=DB_NAME,
@@ -91,18 +92,66 @@ def checkfirst():
     )
     cur = conn.cursor()
     cur.execute("SELECT * FROM staging_raw_products LIMIT 1;")
-    first_col_name = cur.description[0].name
-    print("First column is:", first_col_name)
-    
-    row = cur.fetchone()      # returns a 1‑tuple like (123, )
+    row = cur.fetchone()
+    col_names = [desc[0] for desc in cur.description]
     if row:
-        first_value = row[2]   # extract the scalar
-        print(first_value)
+        print("Column names:", col_names)
+        print("First row:", row)
     else:
         print("No rows found")
     cur.close()
     conn.close()
 
+def test_recent_insert():
+    """Test if at least one row was inserted into staging_raw_products in the last 2 hours, optionally filtered by name."""
+    conn = psycopg2.connect(
+        dbname=DB_NAME,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        host=DB_HOST,
+        port=DB_PORT
+    )
+    cur = conn.cursor()
+    two_hours_ago = datetime.datetime.now() - datetime.timedelta(hours=2)
+    # If you want to filter by name, you must extract it from the JSON column (raw_payload)
+    cur.execute(
+        """
+        SELECT COUNT(*) FROM staging_raw_products
+        WHERE scraped_at >= %s AND raw_payload->>'name' ILIKE '(Refurbished)%';
+        """,
+        (two_hours_ago,)
+    )
+    count = cur.fetchone()[0]
+    if count > 0:
+        print(f"PASS: {count} row(s) inserted in the last 2 hours with name starting with '(Refurbished)'.")
+    else:
+        print("FAIL: No rows inserted in the last 2 hours with name starting with '(Refurbished)'.")
+    cur.close()
+    conn.close()
+
+def print_refurbished_asus_tuf():
+    """Print all rows from products where name matches the refurbished ASUS TUF Gaming A15, AMD Ryzen 7 pattern."""
+    conn = psycopg2.connect(
+        dbname=DB_NAME,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        host=DB_HOST,
+        port=DB_PORT
+    )
+    cur = conn.cursor()
+    cur.execute(
+        """
+        SELECT * FROM products WHERE title ILIKE '%(Refurbished)%ASUS TUF Gaming A15, AMD Ryzen 7%';
+        """
+    )
+    rows = cur.fetchall()
+    col_names = [desc[0] for desc in cur.description]
+    print("Column names:", col_names)
+    print(f"Total rows: {len(rows)}")
+    for row in rows:
+        print(row)
+    cur.close()
+    conn.close()
+
 if __name__ == "__main__":
-    insert_to_staging('amazonday3scrape.json')
-    checkfirst()
+    print_refurbished_asus_tuf()

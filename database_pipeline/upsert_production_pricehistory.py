@@ -3,7 +3,8 @@
 etl_staging_to_core.py
 
 Reads raw staging records, upserts into products,
-inserts into price_history, and marks staging rows as processed.
+inserts into price_history, marks staging rows as processed,
+and updates high_res_image_url in products.
 """
 import re
 import json
@@ -14,6 +15,7 @@ from decimal import Decimal
 import os
 import logging
 from dotenv import load_dotenv
+
 load_dotenv()
 
 # === CONFIGURATION ===
@@ -24,7 +26,6 @@ DB_CONFIG = {
     'user':     os.getenv("PG_USER"),
     'password': os.getenv("PG_PASSWORD"),
 }
-
 
 BATCH_SIZE = 500  # adjust as needed
 
@@ -125,6 +126,19 @@ def mark_processed(conn, staging_ids):
         """, (staging_ids,))
     conn.commit()
 
+# === UPDATE HIGH-RES IMAGE URLS ===
+def update_high_res_image_urls(conn):
+    """
+    Computes and stores high_res_image_url based on existing image_url.
+    """
+    sql = """
+    UPDATE products
+       SET high_res_image_url = REGEXP_REPLACE(image_url, '_[^_]*UY[0-9]+_', '_SL1500_')
+    """
+    with conn.cursor() as cur:
+        cur.execute(sql)
+    conn.commit()
+
 # === MAIN ETL LOOP ===
 def main():
     conn = get_conn()
@@ -172,7 +186,10 @@ def main():
         insert_price_history(conn, history_batch)
         mark_processed(conn, processed_ids)
 
-        print(f"Processed {len(processed_ids)} rows.")
+        # Finally, update high-res image URLs
+        update_high_res_image_urls(conn)
+
+        print(f"Processed {len(processed_ids)} rows and updated high-res URLs.")
     finally:
         conn.close()
 
