@@ -10,7 +10,7 @@ load_dotenv()
 DB_CONFIG = {
     'host':     os.getenv("PG_HOST", "localhost"),
     'port':     os.getenv("PG_PORT"),
-    'dbname':   os.getenv("PG_NAME"),
+    'dbname':   os.getenv("PG_DB"),
     'user':     os.getenv("PG_USER", "postgres"),
     'password': os.getenv("PG_PASSWORD"),
 }
