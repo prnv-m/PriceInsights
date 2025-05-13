@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+import { BrowserRouter as Router, Routes, Route, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
+import debounce from 'lodash/debounce';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import TopPanel from './components/TopPanel';
 import TopBar from './components/TopBar';
@@ -22,10 +24,20 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import ProductDetails from './components/ProductDetails';
+import SearchBar from './components/SearchBar';
 
-function App() {
+// Import the actual page components
+import TrendingPage from './components/TrendingPage';
+import DealsPage from './components/DealsPage';
+import AboutUsPage from './components/AboutUsPage';
+import BestsellersPage from './components/BestsellersPage';
+
+function ProductList() {
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState(searchParams.get('q') || "");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -50,7 +62,12 @@ function App() {
 
   // Initial data fetch
   useEffect(() => {
-    fetchProducts();
+    const initialQuery = searchParams.get('q');
+    if (initialQuery) {
+      handleSearch(initialQuery, true);
+    } else {
+      fetchProducts();
+    }
   }, []);
 
   // Update max price and price range when products are fetched
@@ -66,13 +83,10 @@ function App() {
 
   // Filter products whenever search term or categories change
   useEffect(() => {
-    applyFilters();
-  }, [searchTerm, selectedCategories, products, currentPage]);
-
-  // Trigger filtering when sort option changes
-  useEffect(() => {
-    applyFilters();
-  }, [sortOption]);
+    if (!searchTerm) {
+      applyFilters();
+    }
+  }, [selectedCategories, currentPage, sortOption, priceRange, products]);
 
   const fetchProducts = async () => {
     setIsLoading(true);
@@ -120,18 +134,12 @@ function App() {
   };
 
   const applyFilters = () => {
-    let filtered = [...products];
-
-    // Apply search filter
-    if (searchTerm) {
-      filtered = filtered.filter(product => {
-        const title = getTitle(product);
-        return title.toLowerCase().includes(searchTerm.toLowerCase());
-      });
-    }
+    console.log("Applying filters/sort. Current products count:", products.length);
+    let filtered = [...products]; // Start with the current products (full list or search results)
 
     // Apply category filter
     if (selectedCategories.length > 0) {
+      console.log("Applying category filter:", selectedCategories);
       filtered = filtered.filter(product => {
         const category = getCategory(product);
         return selectedCategories.includes(category.toLowerCase());
@@ -139,21 +147,31 @@ function App() {
     }
 
     // Apply price filter
+    console.log("Applying price filter:", priceRange);
     filtered = filtered.filter(product => {
       const price = parseFloat(getPrice(product));
-      return price >= priceRange[0] && price <= priceRange[1];
+      // Ensure price is a valid number before comparison
+      return !isNaN(price) && price >= priceRange[0] && price <= priceRange[1];
     });
 
     // Apply sorting
+    console.log("Applying sort:", sortOption);
     filtered = sortProducts(filtered, sortOption);
 
-    // Calculate total pages
+    // Calculate total pages based on the *final* filtered list
     const total = Math.ceil(filtered.length / ITEMS_PER_PAGE);
-    setTotalPages(total);
-
+    setTotalPages(total > 0 ? total : 1); // Ensure totalPages is at least 1
+    
     // Apply pagination
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    // Make sure currentPage is valid for the new totalPages
+    const newCurrentPage = Math.min(currentPage, total > 0 ? total : 1);
+    if (currentPage !== newCurrentPage) {
+        setCurrentPage(newCurrentPage);
+    }
+    
+    const startIndex = (newCurrentPage - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
+    console.log(`Pagination: Showing items ${startIndex} to ${endIndex-1} from ${filtered.length} total filtered.`);
     setFilteredProducts(filtered.slice(startIndex, endIndex));
   };
 
@@ -161,9 +179,44 @@ function App() {
     setCurrentPage(page);
   };
 
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-    setCurrentPage(1); // Reset to first page on new search
+  const handleSearch = async (query, isInitialLoad = false) => {
+    const trimmedQuery = query.trim();
+    setSearchTerm(trimmedQuery); // Update state
+    if (!isInitialLoad) { 
+      setSearchParams(trimmedQuery ? { q: trimmedQuery } : {}); // Update URL
+    }
+    setCurrentPage(1); // Reset to page 1 on new search
+    
+    if (!trimmedQuery) {
+      // If search is cleared, fetch all products again
+      fetchProducts(); 
+      return; // Exit early
+    }
+    
+    setIsLoading(true);
+    setError(null); // Clear previous errors
+    try {
+      const res = await axios.get(`http://127.0.0.1:8000/api/search?q=${encodeURIComponent(trimmedQuery)}`);
+      
+      if (res.data && Array.isArray(res.data.results)) {
+        // ONLY update the main products state. Filtering/sorting will happen in useEffect/applyFilters
+        setProducts(res.data.results);
+        // Note: The useEffect watching 'products' will trigger applyFilters
+      } else {
+        console.log("Search returned no results or invalid data");
+        setProducts([]); // Set to empty array if search yields nothing
+        setFilteredProducts([]);
+        setTotalPages(0);
+      }
+    } catch (err) {
+      console.error("Error searching products:", err);
+      setError("Failed to search products. Please try again later.");
+      setProducts([]); // Clear products on error
+      setFilteredProducts([]);
+      setTotalPages(0);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleCategoryChange = (category) => {
@@ -185,8 +238,8 @@ function App() {
 
   // Function to safely get image URL from different possible structures
   const getImageUrl = (product) => {
-    return product["image-url"] || 
-           product.image_url || 
+    return product["high_res_image_url"] || 
+           product.high_res_image_url || 
            product.imageUrl || 
            product.image || 
            "/api/placeholder/200/200";
@@ -214,6 +267,10 @@ function App() {
     return product.raw_discount || product.discount || null;
   };
 
+  const handleCardClick = (product) => {
+    navigate(`/product/${product.asin}`);
+  };
+
   const LoadingIndicator = () => (
     <div className="flex justify-center items-center py-4">
       <Loader className="h-6 w-6 animate-spin mr-2" />
@@ -221,9 +278,16 @@ function App() {
     </div>
   );
 
+  // Filter/Sort Effect - Simplified: always calls applyFilters when dependencies change
+  useEffect(() => {
+    console.log("Filter/Sort/Page/Products useEffect triggered. Search term:", searchTerm);
+    // applyFilters handles all logic based on current state (products, filters, sort, page)
+    applyFilters();
+    // We depend on products, selectedCategories, priceRange, sortOption, currentPage
+  }, [products, selectedCategories, priceRange, sortOption, currentPage]);
+
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Add TopBar at the very top */}
       <TopBar />
       
       <div className="flex">
@@ -360,7 +424,7 @@ function App() {
           <TopPanel />
           
           <div className="p-6">
-          <div className="w-[1200px] mx-auto">
+            <div className="w-[1200px] mx-auto">
               <div className="flex items-center gap-4 mb-8">
                 <Button 
                   variant="outline" 
@@ -372,19 +436,21 @@ function App() {
                 </Button>
                 
                 <div className="relative flex-1">
-                  <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                  <Input
-                    type="text"
-                    placeholder="Search products..."
-                    value={searchTerm}
-                    onChange={handleSearch}
-                    className="pl-10 pr-4 border-2 border-gray-300 focus:border-blue-500"
+                  <SearchBar 
+                    onSearch={handleSearch}
+                    onSuggestionClick={handleSearch}
+                    isLoading={isLoading}
+                    initialSearchTerm={searchTerm}
                   />
                 </div>
                 
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button className="flex items-center gap-2 bg-white border-2 border-gray-300 hover:bg-gray-50 text-gray-700">
+                    {/*w-full bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2*/}
+                    <Button className="flex items-center gap-2
+         bg-black hover:bg-gray-900
+         text-white
+         border-2 border-gray-300 px-4 py-2 rounded">
                       {sortOption === 'newest' ? 'Newest' : 
                       sortOption === 'price-high' ? 'Price: High to Low' :
                       sortOption === 'price-low' ? 'Price: Low to High' :
@@ -448,7 +514,11 @@ function App() {
                 <>
                   <div className="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-3 gap-5 w-full">
                     {filteredProducts.map((product, index) => (
-                      <Card key={index} className="flex flex-col h-[550px] border-2 border-gray-200 hover:border-blue-500 transition-colors">
+                      <Card 
+                        key={index} 
+                        className="flex flex-col h-[550px] border-2 border-gray-200 hover:border-blue-500 transition-colors cursor-pointer"
+                        onClick={() => handleCardClick(product)}
+                      >
                         <div className="aspect-[4/3] relative bg-white-100 h-[300px]">
                           <div className="absolute inset-0 flex items-center justify-center p-2">
                             <img 
@@ -464,6 +534,11 @@ function App() {
                           {getCategory(product) && (
                             <Badge className="absolute top-2 left-2 capitalize bg-blue-100 text-blue-800">
                               {getCategory(product)}
+                            </Badge>
+                          )}
+                          {product.hasOwnProperty('availability') && product.availability === false && (
+                            <Badge className="absolute top-2 right-2 text-red-600 border-red-600 bg-red-50">
+                              Currently not Available
                             </Badge>
                           )}
                         </div>
@@ -484,7 +559,10 @@ function App() {
                           <CardFooter className="mt-auto">
                             <Button 
                               className="w-full bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2"
-                              onClick={() => fetchPriceHistory(product)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                fetchPriceHistory(product);
+                              }}
                             >
                               <ChartBar className="h-4 w-4" /> View Price History
                             </Button>
@@ -496,35 +574,87 @@ function App() {
 
                   {/* Pagination */}
                   <div className="flex justify-center items-center gap-2 mt-8">
-                    <Button
-                      variant="outline"
-                      onClick={() => handlePageChange(currentPage - 1)}
-                      disabled={currentPage === 1}
-                      className="border-2 border-gray-300"
-                    >
-                      <ChevronLeft className="h-4 w-4" />
-                    </Button>
+                  <Button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="border-2 border-gray-300 bg-black text-white hover:bg-gray-800"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </Button>
+                                      
+                    {(() => {
+                      const pages = [];
+                      const maxVisiblePages = 5;
+                      const halfVisible = Math.floor(maxVisiblePages / 2);
+                      
+                      let startPage = Math.max(1, currentPage - halfVisible);
+                      let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+                      
+                      if (endPage - startPage + 1 < maxVisiblePages) {
+                        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+                      }
+                      
+                      if (startPage > 1) {
+                        pages.push(
+                          <Button
+                            key={1}
+                            onClick={() => handlePageChange(1)}
+                            className="border-2 border-gray-300 bg-transparent text-gray-700 hover:bg-gray-50"
+                          >
+                            1
+                          </Button>
+                        );
+                        if (startPage > 2) {
+                          pages.push(
+                            <span key="start-ellipsis" className="px-2">
+                              ...
+                            </span>
+                          );
+                        }
+                      }
+                      
+                      for (let i = startPage; i <= endPage; i++) {
+                        pages.push(
+                          <Button
+                            key={i}
+                            onClick={() => handlePageChange(i)}
+                            className={`border-2 ${
+                              currentPage === i 
+                                ? 'bg-blue-600 text-white border-blue-600' 
+                                : 'border-gray-300 bg-transparent text-gray-700 hover:bg-gray-50'
+                            }`}
+                          >
+                            {i}
+                          </Button>
+                        );
+                      }
+                      
+                      if (endPage < totalPages) {
+                        if (endPage < totalPages - 1) {
+                          pages.push(
+                            <span key="end-ellipsis" className="px-2">
+                              ...
+                            </span>
+                          );
+                        }
+                        pages.push(
+                          <Button
+                            key={totalPages}
+                            onClick={() => handlePageChange(totalPages)}
+                            className="border-2 border-gray-300 bg-transparent text-gray-700 hover:bg-gray-50"
+                          >
+                            {totalPages}
+                          </Button>
+                        );
+                      }
+                      
+                      return pages;
+                    })()}
                     
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                      <Button
-                        key={page}
-                        variant={currentPage === page ? "default" : "outline"}
-                        onClick={() => handlePageChange(page)}
-                        className={`${
-                          currentPage === page 
-                            ? 'bg-blue-600 text-white' 
-                            : 'border-2 border-gray-300 text-gray-700'
-                        }`}
-                      >
-                        {page}
-                      </Button>
-                    ))}
-                    
                     <Button
-                      variant="outline"
                       onClick={() => handlePageChange(currentPage + 1)}
                       disabled={currentPage === totalPages}
-                      className="border-2 border-gray-300"
+                      className="border-2 border-gray-300 bg-transparent text-gray-700 hover:bg-gray-50"
                     >
                       <ChevronRight className="h-4 w-4" />
                     </Button>
@@ -561,12 +691,10 @@ function App() {
                     const date = new Date(history.timestamp);
                     const formattedDate = date.toLocaleDateString();
                     const formattedTime = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                    
                     // Determine if this is a price change by comparing with previous entry
                     const isPriceChange = index > 0 && 
                       (history.raw_price !== priceHistory[index-1].raw_price || 
                        history.raw_discount !== priceHistory[index-1].raw_discount);
-                    
                     return (
                       <div 
                         key={index}
@@ -577,6 +705,12 @@ function App() {
                           {history.raw_discount && (
                             <Badge variant="outline" className={history.raw_discount.includes('off') ? "text-green-600" : "text-gray-600"}>
                               {history.raw_discount}
+                            </Badge>
+                          )}
+                          {/* Availability badge */}
+                          {selectedProduct && selectedProduct.hasOwnProperty('availability') && selectedProduct.availability === false && (
+                            <Badge variant="outline" className="text-red-600 border-red-600 bg-red-50">
+                              Currently not Available
                             </Badge>
                           )}
                         </div>
@@ -593,7 +727,40 @@ function App() {
           </DialogContent>
         </Dialog>
       </div>
+      {/* Footer */}
+      <footer className="w-full bg-gray-900 text-white py-8 mt-12">
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between px-6 gap-6">
+          <div className="flex items-center gap-4">
+            <img src="/assets/shopmetrics.png" alt="ShopMetrics Logo" className="h-14 w-14 rounded-lg shadow-lg" />
+            <span className="text-2xl font-bold tracking-wide">ShopMetrics</span>
+          </div>
+          <div className="text-center md:text-left text-gray-300 text-sm flex-1">
+            <p>&copy; {new Date().getFullYear()} ShopMetrics. All rights reserved.</p>
+            <p className="mt-1">This site is not affiliated with Amazon or any other retailer. All trademarks and brands are the property of their respective owners.</p>
+          </div>
+          <div className="flex flex-col items-center gap-2">
+            <a href="mailto:support@shopmetrics.com" className="text-blue-400 hover:underline">Contact Support</a>
+            <a href="#" className="text-gray-400 hover:text-white text-xs">Privacy Policy</a>
+            <a href="#" className="text-gray-400 hover:text-white text-xs">Terms of Service</a>
+          </div>
+        </div>
+      </footer>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<ProductList />} />
+        <Route path="/product/:asin" element={<ProductDetails />} />
+        <Route path="/trending" element={<TrendingPage />} />
+        <Route path="/deals" element={<DealsPage />} />
+        <Route path="/about" element={<AboutUsPage />} />
+        <Route path="/bestsellers" element={<BestsellersPage />} />
+      </Routes>
+    </Router>
   );
 }
 

@@ -6,29 +6,29 @@ export default function TopBar() {
     <div className="w-full h-16 border-b bg-white">
       <div className="h-full max-w-9xl mx-auto px-4 flex items-center justify-between">
         {/* Left side - Logo and nav items */}
-        <div className="flex items-center space-x-8">
-          {/* Logo */}
-          <div className="flex items-center space-x-2">
-            <img 
-              src="/assets/shopmetrics1.png" 
-              alt="ShopMetrics" 
-              className="h-18 w-18"
-            />
-            <span className="text-xl font-semibold">ShopMetrics</span>
-          </div>
+        <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2">
+                <a href="/">
+                  <img 
+                  src="/assets/shopmetrics1.png" 
+                  alt="ShopMetrics" 
+                  className="h-18 w-18"
+                  />
+                </a>
+                </div>
 
-          {/* Navigation items */}
+                {/* Navigation items */}
           <nav className="hidden md:flex items-center space-x-6">
-            <a href="#trending" className="text-sm font-medium text-gray-700 hover:text-gray-900">
+            <a href="/trending" className="text-sm font-medium text-gray-700 hover:text-gray-900">
               Trending
             </a>
-            <a href="#bestsellers" className="text-sm font-medium text-gray-700 hover:text-gray-900">
+            <a href="/bestsellers" className="text-sm font-medium text-gray-700 hover:text-gray-900">
               Bestsellers
             </a>
-            <a href="#deals" className="text-sm font-medium text-gray-700 hover:text-gray-900">
+            <a href="/deals" className="text-sm font-medium text-gray-700 hover:text-gray-900">
               Today's Deals
             </a>
-            <a href="#about" className="text-sm font-medium text-gray-700 hover:text-gray-900">
+            <a href="/about" className="text-sm font-medium text-gray-700 hover:text-gray-900">
               About Us
             </a>
           </nav>
