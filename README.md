@@ -22,8 +22,7 @@ Run the scraper to collect popular Amazon CD listings and populate the staging t
 
 ```
 python scrapepopular.py
-## Sample screenshots:
-### Homepage with products
+
 ```
 
 ### Step 2: Upsert into Production Tables
@@ -44,7 +43,8 @@ Navigate to the frontend project folder and run the dev server:
 cd frontend_pricetracker
 npm run dev
 ```
-
+## Sample screenshots:
+### Homepage with products
 ![image](https://github.com/user-attachments/assets/45626cc1-312b-44c8-bde9-7d4cf511a127)
 
 ### Product page
