@@ -9,3 +9,47 @@ PriceInsights is a comprehensive full-stack price tracking solution that monitor
 **-Customizable Watchlists:** Create and manage lists of products you're interested in<br />
 **-Browser Extension**: See competitive pricing while browsing your favorite stores<br />
 **-Intelligent Scraping:** Compliant web scraping with rate limiting and anti-detection measures<br />
+
+## Ensure the following are installed:
+- Python 3.9+
+- PostgreSQL or your chosen database (configured in your pipeline)
+- Node.js & npm (for frontend)
+- Uvicorn (for API server)
+
+## Scraping pipelines
+### Step 1: Scrape New Products
+Run the scraper to collect popular Amazon CD listings and populate the staging table.
+
+```
+python scrapepopular.py
+## Sample screenshots:
+### Homepage with products
+```
+
+### Step 2: Upsert into Production Tables
+Insert or update the scraped products into the main product and price history tables without creating conflicts.
+```
+python upsert_production_pricehistory.py
+```
+### Step 3: Update Price Instances & Availability
+Find new price instances for existing products and mark items as unavailable if they no longer appear in the listings.
+
+```
+python find_new_priceinstance.py
+```
+
+## Run the Backend API
+Navigate to the frontend project folder and run the dev server:
+```
+cd frontend_pricetracker
+npm run dev
+```
+
+![image](https://github.com/user-attachments/assets/45626cc1-312b-44c8-bde9-7d4cf511a127)
+
+### Product page
+![image](https://github.com/user-attachments/assets/893854c5-9d37-4cb3-bd05-40dc2a9d323f)
+
+### Product price history
+![image](https://github.com/user-attachments/assets/99bbf624-1c16-4b81-b808-b4710413bf71)
+
