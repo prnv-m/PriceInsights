@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 from fastapi import Path
+from fastapi.responses import PlainTextResponse
 import psycopg2
 import os
 import logging
@@ -49,25 +50,27 @@ def get_products():
     Datetimes are JSON-encoded automatically.
     """
     sql = """
-    SELECT
-      p.asin,
-      p.title,
-      p.high_res_image_url,
-      p.image_url,
-      p.category,
-      p.availability,
-      ph.raw_price,
-      ph.raw_discount,
-      ph.ts AS last_scraped
-    FROM products p
-    LEFT JOIN LATERAL (
-      SELECT raw_price, raw_discount, ts
-      FROM price_history
-      WHERE asin = p.asin
-      ORDER BY ts DESC
-      LIMIT 1
-    ) ph ON TRUE
-    ORDER BY p.title;
+SELECT
+  p.asin,
+  p.title,
+  p.high_res_image_url,
+  p.image_url,
+  p.category,
+  p.availability,
+  ph.raw_price,
+  ph.raw_discount,
+  ph.ts AS last_scraped
+FROM products p
+LEFT JOIN LATERAL (
+  SELECT raw_price, raw_discount, ts
+  FROM price_history
+  WHERE asin = p.asin
+  ORDER BY ts DESC
+  LIMIT 1
+) ph ON TRUE
+ORDER BY 
+  NOT availability, 
+  p.title;
     """
 
     try:
@@ -614,3 +617,15 @@ def get_bestseller_products():
             status_code=500,
             content={"error": "An unexpected error occurred", "details": str(e)}
         )
+from ML_predictor_ import predict_price_drop_holt
+
+@app.get("/product/{asin}/predictprice", response_class=PlainTextResponse)
+def predict_price(
+    asin: str = Path(..., description="ASIN of the product"),
+    forecast_days: int = Query(30, description="Number of days to forecast")
+):
+    """
+    Returns a prediction message for the given ASIN.
+    """
+    prediction_message = predict_price_drop_holt(asin, forecast_days)
+    return prediction_message

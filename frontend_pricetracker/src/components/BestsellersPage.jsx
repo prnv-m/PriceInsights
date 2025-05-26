@@ -13,7 +13,7 @@ const getPrice = (product) => product.raw_price || 'N/A';
 const getTitle = (product) => product.title || 'Unnamed Product';
 const getCategory = (product) => (product.category || 'Uncategorized').toLowerCase();
 const getDiscount = (product) => product.raw_discount || null;
-
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export default function BestsellersPage() {
   const navigate = useNavigate();
   const [bestsellerProducts, setBestsellerProducts] = useState([]);
@@ -28,7 +28,7 @@ export default function BestsellersPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/products/bestsellers");
+      const response = await axios.get(`${API_BASE_URL}/api/products/bestsellers`);
       setBestsellerProducts(response.data);
     } catch (err) {
       console.error("Error fetching bestseller products:", err);

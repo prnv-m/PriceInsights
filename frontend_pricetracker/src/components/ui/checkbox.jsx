@@ -1,28 +1,63 @@
 import * as React from "react"
-import * as CheckboxPrimitive from "@radix-ui/react-checkbox"
 import { CheckIcon } from "lucide-react"
 
-import { cn } from "@/lib/utils"
+// Simple cn utility function to merge class names
+function cn(...classes) {
+  return classes.filter(Boolean).join(' ')
+}
 
-function Checkbox({
-  className,
-  ...props
+function Checkbox({ 
+  checked, 
+  onCheckedChange, 
+  className, 
+  id,
+  disabled = false,
+  ...props 
 }) {
+  const handleClick = () => {
+    if (!disabled && onCheckedChange) {
+      onCheckedChange(!checked)
+    }
+  }
+
+  const handleKeyDown = (e) => {
+    if ((e.key === ' ' || e.key === 'Enter') && !disabled) {
+      e.preventDefault()
+      if (onCheckedChange) {
+        onCheckedChange(!checked)
+      }
+    }
+  }
+
   return (
-    <CheckboxPrimitive.Root
-      data-slot="checkbox"
+    <button
+      type="button"
+      role="checkbox"
+      aria-checked={checked}
+      id={id}
+      disabled={disabled}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
       className={cn(
-        "peer border-input dark:bg-input/30 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground dark:data-[state=checked]:bg-primary data-[state=checked]:border-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive size-4 shrink-0 rounded-[4px] border shadow-xs transition-shadow outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50",
+        // Base styles
+        "w-4 h-4 border-2 rounded flex items-center justify-center transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2",
+        // Checked state
+        checked 
+          ? "bg-blue-600 border-blue-600 text-white focus:ring-blue-500" 
+          : "bg-white border-gray-300 hover:border-gray-400 focus:ring-blue-500",
+        // Disabled state
+        disabled 
+          ? "opacity-50 cursor-not-allowed" 
+          : "cursor-pointer",
         className
       )}
-      {...props}>
-      <CheckboxPrimitive.Indicator
-        data-slot="checkbox-indicator"
-        className="flex items-center justify-center text-current transition-none">
-        <CheckIcon className="size-3.5" />
-      </CheckboxPrimitive.Indicator>
-    </CheckboxPrimitive.Root>
-  );
+      {...props}
+    >
+      {checked && (
+        <CheckIcon className="w-3 h-3" />
+      )}
+    </button>
+  )
 }
 
 export { Checkbox }

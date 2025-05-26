@@ -13,7 +13,7 @@ const getPrice = (product) => product.raw_price || 'N/A';
 const getTitle = (product) => product.title || 'Unnamed Product';
 const getCategory = (product) => (product.category || 'Uncategorized').toLowerCase();
 const getDiscount = (product) => product.raw_discount || null;
-
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export default function TrendingPage() {
   const navigate = useNavigate();
   const [trendingProducts, setTrendingProducts] = useState([]);
@@ -28,7 +28,7 @@ export default function TrendingPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/products/trending");
+      const response = await axios.get(`${API_BASE_URL}/api/products/trending`);
       setTrendingProducts(response.data);
     } catch (err) {
       console.error("Error fetching trending products:", err);

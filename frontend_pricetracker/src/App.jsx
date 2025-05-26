@@ -33,6 +33,9 @@ import DealsPage from './components/DealsPage';
 import AboutUsPage from './components/AboutUsPage';
 import BestsellersPage from './components/BestsellersPage';
 
+// Add this near the top of your file
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 function ProductList() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -91,7 +94,7 @@ function ProductList() {
   const fetchProducts = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("http://127.0.0.1:8000/products");
+      const response = await axios.get(`${API_BASE_URL}/products`);
       setProducts(response.data);
       setFilteredProducts(response.data.slice(0, ITEMS_PER_PAGE));
       setTotalPages(Math.ceil(response.data.length / ITEMS_PER_PAGE));
@@ -105,7 +108,7 @@ function ProductList() {
 
   const fetchPriceHistory = async (product) => {
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/products/${product.asin}`);
+      const response = await axios.get(`${API_BASE_URL}/products/${product.asin}`);
       setPriceHistory(response.data.price_history);
       setSelectedProduct(response.data);
       setIsDialogOpen(true);
@@ -114,7 +117,7 @@ function ProductList() {
     }
   };
 
-  const sortProducts = (products, option) => {
+  const cts = (products, option) => {
     const sorted = [...products];
     switch(option) {
       case 'price-high':
@@ -156,7 +159,7 @@ function ProductList() {
 
     // Apply sorting
     console.log("Applying sort:", sortOption);
-    filtered = sortProducts(filtered, sortOption);
+    filtered = cts(filtered, sortOption);
 
     // Calculate total pages based on the *final* filtered list
     const total = Math.ceil(filtered.length / ITEMS_PER_PAGE);
@@ -196,7 +199,7 @@ function ProductList() {
     setIsLoading(true);
     setError(null); // Clear previous errors
     try {
-      const res = await axios.get(`http://127.0.0.1:8000/api/search?q=${encodeURIComponent(trimmedQuery)}`);
+      const res = await axios.get(`${API_BASE_URL}/api/search?q=${encodeURIComponent(trimmedQuery)}`);
       
       if (res.data && Array.isArray(res.data.results)) {
         // ONLY update the main products state. Filtering/sorting will happen in useEffect/applyFilters
@@ -287,17 +290,17 @@ function ProductList() {
   }, [products, selectedCategories, priceRange, sortOption, currentPage]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen w-full md:w-screen flex flex-col bg-gray-50 overflow-x-hidden">
       <TopBar />
       
       <div className="flex">
         {/* Desktop Sidebar - Hidden on mobile */}
         <aside className="hidden md:block w-64 border-r bg-white">
-          <div className="h-16 flex items-center px-4 border-b">
+          <div className="h-12 flex items-center px-4 border-b">
             
             <h2 className="text-lg font-semibold">Shop by Category</h2>
           </div>
-          <ScrollArea className="h-[calc(100vh-4rem)]">
+          <ScrollArea className="h-[calc(100vh-theme(spacing.16)-theme(spacing.16))]">
             <div className="p-4 space-y-4">
               {/* Add Price Range Slider */}
               <div className="space-y-4">
@@ -324,11 +327,12 @@ function ProductList() {
               
               {categories.map((category) => (
                 <div key={category} className="flex items-center">
-                  <Checkbox 
+                  <input
+                    type="checkbox"
                     id={`sidebar-${category}`}
                     checked={selectedCategories.includes(category)}
-                    onCheckedChange={() => handleCategoryChange(category)}
-                    className="border-2 border-gray-300 rounded-sm h-4 w-4"
+                    onChange={() => handleCategoryChange(category)}
+                    className="h-4 w-4 text-white bg-black border-gray-600 rounded focus:ring-gray-500 focus:ring-2"
                   />
                   <Label 
                     htmlFor={`sidebar-${category}`}
@@ -338,7 +342,7 @@ function ProductList() {
                   </Label>
                 </div>
               ))}
-              
+                            
               {selectedCategories.length > 0 && (
                 <>
                   <Separator className="my-4" />
@@ -358,10 +362,10 @@ function ProductList() {
         {/* Mobile Sidebar Sheet */}
         <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
           <SheetContent side="left" className="w-64 p-0">
-            <div className="h-16 flex items-center px-4 border-b">
+            <div className="h-12 flex items-center px-4 border-b">
               <h2 className="text-lg font-semibold">Shop by Category</h2>
             </div>
-            <ScrollArea className="h-[calc(100vh-4rem)]">
+            <ScrollArea className="h-[calc(100%-theme(spacing.16)-theme(spacing.16))]">
               <div className="p-4 space-y-4">
                 {/* Add Price Range Slider */}
                 <div className="space-y-4">
@@ -423,8 +427,8 @@ function ProductList() {
         <div className="flex-1">
           <TopPanel />
           
-          <div className="p-6">
-            <div className="w-[1200px] mx-auto">
+          <div className="p-4">
+            <div className="max-w-7xl mx-auto px-4">
               <div className="flex items-center gap-4 mb-8">
                 <Button 
                   variant="outline" 
@@ -443,6 +447,7 @@ function ProductList() {
                     initialSearchTerm={searchTerm}
                   />
                 </div>
+
                 
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -516,11 +521,11 @@ function ProductList() {
                     {filteredProducts.map((product, index) => (
                       <Card 
                         key={index} 
-                        className="flex flex-col h-[550px] border-2 border-gray-200 hover:border-blue-500 transition-colors cursor-pointer"
+                        className="flex flex-col border-2 border-gray-200 hover:border-blue-500 transition-colors cursor-pointer overflow-hidden group"
                         onClick={() => handleCardClick(product)}
                       >
-                        <div className="aspect-[4/3] relative bg-white-100 h-[300px]">
-                          <div className="absolute inset-0 flex items-center justify-center p-2">
+                        <div className="relative w-full aspect-[4/3] bg-white-100">
+                          <div className="absolute inset-0 p-2 flex items-center justify-center">
                             <img 
                               src={getImageUrl(product)} 
                               alt={getTitle(product)}
@@ -543,12 +548,12 @@ function ProductList() {
                           )}
                         </div>
                         <div className="flex-1 flex flex-col">
-                          <CardHeader className="pb-2 flex-none">
-                            <CardTitle className="text-lg line-clamp-2">{getTitle(product)}</CardTitle>
+                          <CardHeader className="p-4 pb-2 flex-none">
+                            <CardTitle className="text-base font-semibold line-clamp-2">{getTitle(product)}</CardTitle>
                           </CardHeader>
                           <CardContent className="flex-none">
                             <div className="flex justify-between items-center">
-                              <span className="text-xl font-bold text-gray-900">₹{getPrice(product)}</span>
+                              <span className="text-lg font-bold text-gray-900">₹{getPrice(product)}</span>
                               {getDiscount(product) && (
                                 <Badge variant="outline" className="text-green-600 border-green-600">
                                   {getDiscount(product)}
@@ -558,10 +563,10 @@ function ProductList() {
                           </CardContent>
                           <CardFooter className="mt-auto">
                             <Button 
-                              className="w-full bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2"
+                              className="mt-3 w-full bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                fetchPriceHistory(product);
+                                navigate(`/product/${product.asin}`);
                               }}
                             >
                               <ChartBar className="h-4 w-4" /> View Price History
@@ -573,7 +578,7 @@ function ProductList() {
                   </div>
 
                   {/* Pagination */}
-                  <div className="flex justify-center items-center gap-2 mt-8">
+                  <div className="flex justify-center items-center gap-2 mt-6">
                   <Button
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}

@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { ArrowLeft, TrendingUp, TrendingDown, DollarSign, Search } from "lucide-react";
+import { ArrowLeft, TrendingUp, TrendingDown, DollarSign } from "lucide-react";
 import {
   LineChart,
   Line,
@@ -17,6 +17,10 @@ import {
 } from 'recharts';
 import TopBar from './TopBar';
 import TopPanel from './TopPanel';
+import SearchBar from "./SearchBar";
+
+// Use the same API_BASE_URL as App.jsx
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function ProductDetails() {
   const { asin } = useParams();
@@ -25,23 +29,56 @@ function ProductDetails() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchError, setSearchError] = useState(null);
+  const [prediction, setPrediction] = useState("");  // New state for prediction
 
   useEffect(() => {
-    const fetchProductDetails = async () => {
+    const fetchProduct = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/products/${asin}`);
+        const response = await axios.get(`${API_BASE_URL}/products/${asin}`);
         setProduct(response.data);
         setLoading(false);
       } catch (err) {
-        console.error("Error fetching product details:", err);
+        console.error("Error fetching product:", err);
         setError("Failed to load product details");
         setLoading(false);
       }
     };
 
-    fetchProductDetails();
+    fetchProduct();
   }, [asin]);
 
+// New effect to fetch prediction from API endpoint
+useEffect(() => {
+  const fetchPrediction = async () => {
+    if (!product) return;
+    
+    try {
+      setPrediction("Loading prediction...");
+      const response = await axios.get(`${API_BASE_URL}/product/${asin}/predictprice?forecast_days=2`);
+      
+      if (response.data) {
+        setPrediction(response.data);
+      } else {
+        setPrediction("No prediction data available");
+      }
+    } catch (err) {
+      console.error("Error fetching prediction:", err);
+      
+      if (err.response?.status === 404) {
+        setPrediction("Prediction not available for this product");
+      } else if (err.response?.status >= 500) {
+        setPrediction("Server error - prediction temporarily unavailable");
+      } else {
+        setPrediction("Unable to load price prediction");
+      }
+    }
+  };
+
+  fetchPrediction();
+}, [asin, product]);
   // Helper function to safely parse price
   const parsePrice = (priceStr) => {
     if (!priceStr) return 0;
@@ -53,7 +90,7 @@ function ProductDetails() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
+      <div className="flex justify-center items-center h-screen w-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
     );
@@ -61,7 +98,7 @@ function ProductDetails() {
 
   if (error || !product) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
+      <div className="flex flex-col items-center justify-center h-screen w-screen">
         <p className="text-red-500 mb-4">{error || "Product not found"}</p>
         <Button onClick={() => navigate(-1)}>Go Back</Button>
       </div>
@@ -88,127 +125,173 @@ function ProductDetails() {
     .sort((a, b) => a.timestamp - b.timestamp); // Ensure chronological order
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen w-screen flex flex-col bg-gray-50">
       <TopBar />
-      <div className="flex">
-        <div className="flex-1">
+      
+      <div className="flex flex-1 overflow-hidden">
+        <div className="flex-1 flex flex-col overflow-hidden">
           <TopPanel />
           
-          <div className="p-6">
-            <div className="w-[1480px] mx-auto">
-              <div className="flex items-center gap-4 mb-8">
+          <div className="flex-1 p-4 overflow-y-auto">
+            <div className="w-full mx-auto px-2">
+              <div className="flex items-center gap-2 mb-4">
                 <Button
                   variant="ghost"
                   onClick={() => navigate(-1)}
-                  className="flex items-center gap-2
-         bg-black hover:bg-gray-900
-         text-white
-         border-2 border-gray-300 px-4 py-2 rounded"
+                  className="flex items-center gap-1 bg-black hover:bg-gray-900 text-white border border-gray-300 px-2 py-1 rounded text-xs"
                 >
-                  <ArrowLeft className="h-4 w-4" />
-                  Back to Products
+                  <ArrowLeft className="h-3 w-3" />
+                  Back
                 </Button>
                 
                 <div className="relative flex-1">
-                  <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                  <Input
-                    type="text"
-                    placeholder="Search products..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 pr-4 border-2 border-gray-300 focus:border-blue-500"
+                  <SearchBar
+                    initialSearchTerm={searchTerm}
+                    onSearch={async (term) => {
+                      setSearchTerm(term);
+                      setSearchLoading(true);
+                      setSearchError(null);
+                      try {
+                        const response = await axios.get(`${API_BASE_URL}/api/search?q=${encodeURIComponent(term)}`);
+                        setSearchResults(response.data);
+                      } catch (err) {
+                        setSearchError("Failed to fetch search results");
+                        setSearchResults([]);
+                      } finally {
+                        setSearchLoading(false);
+                      }
+                    }}
+                    onSuggestionClick={async (term) => {
+                      setSearchTerm(term);
+                      setSearchLoading(true);
+                      setSearchError(null);
+                      try {
+                        const response = await axios.get(`${API_BASE_URL}/api/search?q=${encodeURIComponent(term)}`);
+                        setSearchResults(response.data);
+                      } catch (err) {
+                        setSearchError("Failed to fetch search results");
+                        setSearchResults([]);
+                      } finally {
+                        setSearchLoading(false);
+                      }
+                    }}
+                    className="h-8 text-xs"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* Search Results Section */}
+              {searchLoading && (
+                <div className="mt-2 text-xs text-blue-600">Searching...</div>
+              )}
+              {searchError && (
+                <div className="mt-2 text-xs text-red-600">{searchError}</div>
+              )}
+              {searchResults && searchResults.length > 0 && (
+                <div className="mt-2 bg-white rounded shadow p-2">
+                  <div className="text-xs font-semibold mb-1">Search Results:</div>
+                  <ul className="text-xs space-y-1">
+                    {searchResults.map((result, idx) => (
+                      <li key={idx} className="truncate">
+                        {typeof result === 'string' ? result : (result.title || JSON.stringify(result))}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* Product Image and Basic Info */}
-                <div className="space-y-4">
-                  <div className="bg-white rounded-lg shadow-lg p-4">
-                    <div className="aspect-square relative max-w-[400px] mx-auto">
+                <div className="md:col-span-1">
+                  <div className="bg-white rounded-lg shadow p-2 h-full">
+                    <div className="aspect-square relative max-w-full mx-auto">
                       <img
                         src={product.image_url}
                         alt={product.title}
                         className="w-full h-full object-contain"
                       />
                     </div>
-                    <div className="mt-4">
-                      <h1 className="text-2xl font-bold">{product.title}</h1>
-                      <Badge className="mt-2 capitalize">{product.category}</Badge>
+                    <div className="mt-1 text-center">
+                      {/* Significantly smaller title */}
+                      <h1 className="text-xs font-normal line-clamp-2">{product.title}</h1>
+                      <Badge className="mt-1 capitalize text-xs">{product.category}</Badge>
                     </div>
                   </div>
                 </div>
 
                 {/* Price Statistics Cards */}
-                <div className="grid grid-cols-2 gap-4">
-                  <Card className="bg-white shadow-lg hover:shadow-xl transition-shadow">
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-sm font-medium text-gray-500 flex items-center gap-2">
-                        <DollarSign className="h-4 w-4" />
+                <div className="grid grid-cols-2 gap-2 md:col-span-2">
+                  <Card className="bg-white shadow hover:shadow-md transition-shadow">
+                    <CardHeader className="pb-0 px-3 py-2">
+                      <CardTitle className="text-xs font-medium text-gray-500 flex items-center gap-1">
+                        <DollarSign className="h-3 w-3" />
                         Current Price
                       </CardTitle>
                     </CardHeader>
-                    <CardContent>
-                      <div className="text-2xl font-bold">₹{currentPrice.toLocaleString()}</div>
+                    <CardContent className="pt-1 px-3 pb-2">
+                      <div className="text-lg font-bold">₹{currentPrice.toLocaleString()}</div>
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-white shadow-lg hover:shadow-xl transition-shadow">
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-sm font-medium text-gray-500 flex items-center gap-2">
-                        <TrendingUp className="h-4 w-4 text-red-500" />
+                  <Card className="bg-white shadow hover:shadow-md transition-shadow">
+                    <CardHeader className="pb-0 px-3 py-2">
+                      <CardTitle className="text-xs font-medium text-gray-500 flex items-center gap-1">
+                        <TrendingUp className="h-3 w-3 text-red-500" />
                         Highest Price
                       </CardTitle>
                     </CardHeader>
-                    <CardContent>
-                      <div className="text-2xl font-bold text-red-600">₹{maxPrice.toLocaleString()}</div>
+                    <CardContent className="pt-1 px-3 pb-2">
+                      <div className="text-lg font-bold text-red-600">₹{maxPrice.toLocaleString()}</div>
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-white shadow-lg hover:shadow-xl transition-shadow">
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-sm font-medium text-gray-500 flex items-center gap-2">
-                        <TrendingDown className="h-4 w-4 text-green-500" />
+                  <Card className="bg-white shadow hover:shadow-md transition-shadow">
+                    <CardHeader className="pb-0 px-3 py-2">
+                      <CardTitle className="text-xs font-medium text-gray-500 flex items-center gap-1">
+                        <TrendingDown className="h-3 w-3 text-green-500" />
                         Lowest Price
                       </CardTitle>
                     </CardHeader>
-                    <CardContent>
-                      <div className="text-2xl font-bold text-green-600">₹{minPrice.toLocaleString()}</div>
+                    <CardContent className="pt-1 px-3 pb-2">
+                      <div className="text-lg font-bold text-green-600">₹{minPrice.toLocaleString()}</div>
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-white shadow-lg hover:shadow-xl transition-shadow">
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-sm font-medium text-gray-500 flex items-center gap-2">
-                        <DollarSign className="h-4 w-4" />
+                  <Card className="bg-white shadow hover:shadow-md transition-shadow">
+                    <CardHeader className="pb-0 px-3 py-2">
+                      <CardTitle className="text-xs font-medium text-gray-500 flex items-center gap-1">
+                        <DollarSign className="h-3 w-3" />
                         Average Price
                       </CardTitle>
                     </CardHeader>
-                    <CardContent>
-                      <div className="text-2xl font-bold">₹{avgPrice.toLocaleString()}</div>
+                    <CardContent className="pt-1 px-3 pb-2">
+                      <div className="text-lg font-bold">₹{avgPrice.toLocaleString()}</div>
                     </CardContent>
                   </Card>
                 </div>
               </div>
 
               {/* Price History Chart */}
-              <Card className="mt-8 bg-white shadow-lg">
-                <CardHeader>
-                  <CardTitle>Price History</CardTitle>
+              <Card className="mt-4 bg-white shadow">
+                <CardHeader className="py-2 px-4">
+                  <CardTitle className="text-sm">Price History</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="h-[400px]">
+                <CardContent className="px-2 py-2">
+                  <div className="h-64">
                     <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={chartData}>
-                        <CartesianGrid strokeDasharray="3 3" />
+                      <LineChart data={chartData} margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                         <XAxis 
                           dataKey="date"
-                          tick={{ fontSize: 12 }}
+                          tick={{ fontSize: 10 }}
                           interval="preserveStartEnd"
+                          tickMargin={5}
                         />
                         <YAxis 
                           domain={['dataMin', 'dataMax']}
-                          tickFormatter={(value) => `₹${value.toLocaleString()}`}
+                          tickFormatter={(value) => `₹${value}`}
+                          tick={{ fontSize: 10 }}
+                          width={40}
                         />
                         <Tooltip 
                           formatter={(value, name, props) => [
@@ -219,37 +302,74 @@ function ProductDetails() {
                           contentStyle={{
                             backgroundColor: 'white',
                             border: '1px solid #e5e7eb',
-                            borderRadius: '0.5rem',
-                            boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+                            borderRadius: '0.25rem',
+                            boxShadow: '0 2px 4px -1px rgb(0 0 0 / 0.1)',
+                            fontSize: '11px',
+                            padding: '4px'
                           }}
                         />
                         <Line
                           type="monotone"
                           dataKey="price"
                           stroke="#2563eb"
-                          strokeWidth={2}
-                          dot={false}
+                          strokeWidth={1.5}
+                          dot={{ r: 2 }}
+                          activeDot={{ r: 4 }}
                         />
                       </LineChart>
                     </ResponsiveContainer>
                   </div>
-                  {/* Display all price instances below the chart */}
-                  <div className="mt-4">
-                    <h3 className="font-semibold mb-2">All Price Instances:</h3>
-                    <ul className="text-sm bg-gray-100 rounded p-2 max-h-40 overflow-y-auto">
-                      {chartData.map((entry, idx) => (
-                        <li key={idx} className="mb-1">
-                          {entry.date}: <span className="font-mono">{entry.raw_price}</span>
-                        </li>
-                      ))}
-                    </ul>
+                  
+                  {/* Price history log */}
+                  <div className="mt-2">
+                    <h3 className="text-xs font-semibold mb-1">Price History:</h3>
+                    <div className="text-xs bg-gray-50 rounded p-2 max-h-32 overflow-y-auto">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-2 gap-y-1">
+                        {chartData.map((entry, idx) => (
+                          <div key={idx} className="truncate">
+                            {entry.date}: <span className="font-mono">{entry.raw_price}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
+
+              {/* New Prediction Section */}
+              <Card className="mt-4 bg-white shadow">
+                <CardHeader className="py-2 px-4">
+                  <CardTitle className="text-sm">Price Drop Prediction</CardTitle>
+                </CardHeader>
+                <CardContent className="px-2 py-2">
+                  <p className="text-xs">
+                    {prediction}
+                  </p>
+                </CardContent>
+              </Card>
+              {/* End Prediction Section */}
+              
             </div>
           </div>
         </div>
       </div>
+      <footer className="w-full bg-gray-900 text-white py-8 mt-12">
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between px-6 gap-6">
+          <div className="flex items-center gap-4">
+            <img src="/assets/shopmetrics.png" alt="ShopMetrics Logo" className="h-14 w-14 rounded-lg shadow-lg" />
+            <span className="text-2xl font-bold tracking-wide">ShopMetrics</span>
+          </div>
+          <div className="text-center md:text-left text-gray-300 text-sm flex-1">
+            <p>&copy; {new Date().getFullYear()} ShopMetrics. All rights reserved.</p>
+            <p className="mt-1">This site is not affiliated with Amazon or any other retailer. All trademarks and brands are the property of their respective owners.</p>
+          </div>
+          <div className="flex flex-col items-center gap-2">
+            <a href="mailto:support@shopmetrics.com" className="text-blue-400 hover:underline">Contact Support</a>
+            <a href="#" className="text-gray-400 hover:text-white text-xs">Privacy Policy</a>
+            <a href="#" className="text-gray-400 hover:text-white text-xs">Terms of Service</a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

@@ -7,7 +7,7 @@ import { Loader, AlertCircle, Tag, Eye, ArrowDown } from "lucide-react";
 import { Button } from "./ui/button";
 import TopBar from './TopBar';
 
-// Helper functions (reuse or move to utils)
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const getImageUrl = (product) => product.high_res_image_url || product.image_url || "/api/placeholder/200/200";
 const getPrice = (product) => product.raw_price || 'N/A';
 const getTitle = (product) => product.title || 'Unnamed Product';
@@ -28,7 +28,7 @@ export default function DealsPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/products/deals");
+      const response = await axios.get(`${API_BASE_URL}/api/products/deals`);
       setDealsProducts(response.data);
     } catch (err) {
       console.error("Error fetching deals products:", err);
