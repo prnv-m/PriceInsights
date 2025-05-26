@@ -28,11 +28,23 @@ Find new price instances for existing products and mark items as unavailable if 
 python find_new_priceinstance.py
 ```
 
+## Run frontend with all features initialized
+Ensure FastAPI is initialized 
+```
+uvicorn api:app --host 0.0.0.0 --port 8000
+```
+
 ## Run the Backend API
 Navigate to the frontend project folder and run the dev server:
 ```
 cd frontend_pricetracker
 npm run dev
+```
+
+## Run frontend with all features initialized
+Ensure FastAPI is initialized 
+```
+uvicorn api:app --host 0.0.0.0 --port 8000
 ```
 ## Sample screenshots:
 ### Homepage with products
@@ -41,16 +53,16 @@ npm run dev
 ### Product page
 ![image](https://github.com/user-attachments/assets/893854c5-9d37-4cb3-bd05-40dc2a9d323f)
 
-### Product price history
+### Product price history graph
 ![image](https://github.com/user-attachments/assets/99bbf624-1c16-4b81-b808-b4710413bf71)
 
-## Current and future features
-**-Cross-Platform Price Monitoring:**   Track prices across 5+ major e-commerce platforms<br />
+## Current features with features in development
+ ✅**-Cross-Platform Price Monitoring:**   Track prices across 5+ major e-commerce platforms<br />
 **-Real-time Price Alerts: Receive**   notifications when prices drop or match your target price<br />
-**-Price History Visualization:**   View historical price trends and patterns<br />
-**-Predictive Analytics:**   ML-powered price forecasting to identify the best time to buy<br />
-**-Product Comparison:**   Compare prices across different platforms in one view<br />
+ ✅**-Price History Visualization:**   View historical price trends and patterns<br />
+ ✅**-Predictive Analytics:**   ML-powered price forecasting to identify the best time to buy<br />
+ ✅**-Product Comparison:**   Compare prices across different platforms in one view<br />
 **-Customizable Watchlists:**   Create and manage lists of products you're interested in<br />
 **-Browser Extension**:   See competitive pricing while browsing your favorite stores<br />
-**-Intelligent Scraping:**   Compliant web scraping with rate limiting and anti-detection measures<br />
+ ✅**-Intelligent Scraping:**   Compliant web scraping with rate limiting and anti-detection measures<br />
 
