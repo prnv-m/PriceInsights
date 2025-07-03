@@ -53,12 +53,12 @@ uvicorn api:app --host 0.0.0.0 --port 8000
 ### Product page
 ![image](https://github.com/user-attachments/assets/893854c5-9d37-4cb3-bd05-40dc2a9d323f)
 
-### Product price history graph
-![image](https://github.com/user-attachments/assets/99bbf624-1c16-4b81-b808-b4710413bf71)
+### Product price history graph with buy or not prediction
+![image](https://github.com/user-attachments/assets/8780cdf7-1b4a-4a08-bb62-00887f0cd889)
 
 ## Current features with features in development
  ✅**-Cross-Platform Price Monitoring:**   Track prices across 5+ major e-commerce platforms<br />
-**-Real-time Price Alerts: Receive**   notifications when prices drop or match your target price<br />
+ ✅**-Real-time Price Alerts: Receive**   notifications when prices drop or match your target price<br />
  ✅**-Price History Visualization:**   View historical price trends and patterns<br />
  ✅**-Predictive Analytics:**   ML-powered price forecasting to identify the best time to buy<br />
  ✅**-Product Comparison:**   Compare prices across different platforms in one view<br />
