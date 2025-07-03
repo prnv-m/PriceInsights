@@ -48,7 +48,7 @@ uvicorn api:app --host 0.0.0.0 --port 8000
 ```
 ## Sample screenshots:
 ### Homepage with products
-![image](https://github.com/user-attachments/assets/45626cc1-312b-44c8-bde9-7d4cf511a127)
+![image](https://github.com/user-attachments/assets/342cbc9b-9ae3-4c62-b399-fce757d8d10f)
 
 ### Product page
 ![image](https://github.com/user-attachments/assets/893854c5-9d37-4cb3-bd05-40dc2a9d323f)
